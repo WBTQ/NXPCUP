@@ -1,0 +1,39 @@
+motor.h
+
+	GET_CURR (...)
+
+	struct
+		b mode off/scalar/current/speed
+		flt refSpeed
+		flt refCurrent
+		flt measSpeed
+		flt measCurrent
+		uint dutycycle
+	?torqueToCurrent
+	updateCurrentControlLoop
+	updateSpeedControlLoop
+	updateScalarControlLoop
+	initCurrentControlLoop
+	initSpeedControlLoop
+	initScalarControlLoop	
+	
+rc_control.h
+	uint signals		
+servo.h
+	uint16 refAngle
+
+	setTurnAngle
+pixycam.h
+	?getLines
+nxpcup.h
+	?torqueVectoring
+	updateADASLoop
+	initADASLoop
+	
+hall_encoder.h
+
+?imu_mpu6050.h
+
+main.c
+	ADC_Callback
+	CTimer_Callback
