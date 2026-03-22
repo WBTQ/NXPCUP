@@ -316,9 +316,9 @@ void BOARD_InitBUTTONsPins(void);
   @{ */
 
 /* Symbols to be used with PORT driver */
-#define BOARD_PIXY_SCL_PORT PORT4               /*!<@brief PORT peripheral base pointer */
-#define BOARD_PIXY_SCL_PIN 1U                   /*!<@brief PORT pin number */
-#define BOARD_PIXY_SCL_PIN_MASK (1U << 1U)      /*!<@brief PORT pin mask */
+#define BOARD_PIXY_SCK_PORT PORT4               /*!<@brief PORT peripheral base pointer */
+#define BOARD_PIXY_SCK_PIN 1U                   /*!<@brief PORT pin number */
+#define BOARD_PIXY_SCK_PIN_MASK (1U << 1U)      /*!<@brief PORT pin mask */
                                                 /* @} */
 
 /*! @name PORT4_0 (coord P1), P4_0/J8[4]/SJ14[1]

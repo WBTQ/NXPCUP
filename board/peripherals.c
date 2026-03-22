@@ -1093,7 +1093,7 @@ instance:
         - subaddress: '0'
         - subaddressSize: '1'
         - data: 'default'
-        - data_size_i: '10'
+        - data_size_i: '69'
     - channel_rx_init: 'true'
     - channel_rx:
       - uid: '1773868934754'
@@ -1604,52 +1604,6 @@ static void FreeMASTER_init(void) {
 }
 
 /***********************************************************************************************************************
- * DebugConsole initialization code
- **********************************************************************************************************************/
-/* clang-format off */
-/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-instance:
-- name: 'DebugConsole'
-- type: 'debug_console'
-- mode: 'general'
-- custom_name_enabled: 'false'
-- type_id: 'debug_console_1.0.0'
-- functional_group: 'BOARD_InitPeripherals'
-- config_sets:
-  - fsl_debug_console:
-    - config:
-      - SDK_DEBUGCONSOLE: 'DEBUGCONSOLE_REDIRECT_TO_SDK'
-      - SDK_DEBUGCONSOLE_UART: 'serial_port'
-      - DEBUG_CONSOLE_RX_ENABLE: 'true'
-      - DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN: '128'
-      - DEBUG_CONSOLE_SCANF_MAX_LOG_LEN: '20'
-      - DEBUG_CONSOLE_ENABLE_ECHO: 'false'
-      - PRINTF_FLOAT_ENABLE: 'true'
-      - SCANF_FLOAT_ENABLE: 'false'
-      - PRINTF_ADVANCED_ENABLE: 'true'
-      - SCANF_ADVANCED_ENABLE: 'false'
-      - DEBUG_CONSOLE_TRANSFER_NON_BLOCKING: 'false'
-      - DEBUG_CONSOLE_TRANSMIT_BUFFER_LEN: '512'
-      - DEBUG_CONSOLE_RECEIVE_BUFFER_LEN: '1024'
-      - DEBUG_CONSOLE_TX_RELIABLE_ENABLE: 'true'
-      - DEBUG_CONSOLE_DISABLE_RTOS_SYNCHRONIZATION: 'false'
-    - peripheral_config:
-      - serial_port_type: 'kSerialPort_Uart'
-      - uart_config:
-        - peripheralUART: 'LP_FLEXCOMM4'
-        - clockSource: 'genericUartClockSource'
-        - clockSourceFreq: 'ClocksTool_DefaultInit'
-        - baudRate_Bps: '115200'
-    - debug_console_codegenerator: []
- * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
-/* clang-format on */
-
-static void DebugConsole_init(void) {
-  /* Debug console initialization */
-  DbgConsole_Init(DEBUGCONSOLE_INSTANCE, DEBUGCONSOLE_BAUDRATE, DEBUGCONSOLE_TYPE, DEBUGCONSOLE_CLK_FREQ);
-}
-
-/***********************************************************************************************************************
  * Initialization functions
  **********************************************************************************************************************/
 void BOARD_InitPeripherals(void)
@@ -1674,7 +1628,6 @@ void BOARD_InitPeripherals(void)
   CTIMER1_init();
   LPTMR0_init();
   FreeMASTER_init();
-  DebugConsole_init();
 }
 
 /***********************************************************************************************************************

@@ -34,7 +34,6 @@
 #include "fsl_lpuart.h"
 #include "freemaster.h"
 #include "freemaster_serial_lpuart.h"
-#include "fsl_debug_console.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -177,7 +176,7 @@ extern "C" {
 /* Used DMA device. */
 #define LP_FLEXCOMM2_TX_DMA_BASEADDR DMA0
 /* Leader transfer buffer size */
-#define LP_FLEXCOMM2_MASTER_BUFFER_SIZE 10
+#define LP_FLEXCOMM2_MASTER_BUFFER_SIZE 69
 /* Alias for ADC1 peripheral */
 #define ADC1_PERIPHERAL ADC1
 /* ADC1 interrupt vector ID (number). */
@@ -221,16 +220,6 @@ extern "C" {
 #define FREEMASTER_SERIAL_PERIPHERAL_CLK_FREQ 12000000UL
 /* Definition of the Baud rate */
 #define FREEMASTER_SERIAL_PERIPHERAL_BAUDRATE 115200UL
-/* Debug console is initialized in the peripheral tool */
-#define BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL 
-/* Definition of serial peripheral instance */
-#define DEBUGCONSOLE_INSTANCE 4U
-/* Definition of serial peripheral type */
-#define DEBUGCONSOLE_TYPE kSerialPort_Uart
-/* Definition of the Baud rate */
-#define DEBUGCONSOLE_BAUDRATE 115200UL
-/* Definition of the clock source frequency */
-#define DEBUGCONSOLE_CLK_FREQ 12000000UL
 
 /***********************************************************************************************************************
  * Global variables

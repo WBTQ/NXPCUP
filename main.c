@@ -16,14 +16,20 @@
 #include "pin_mux.h"
 #include "clock_config.h"
 #include "control_loop.h"
+#include "fsl_lpi2c_edma.h"
+#include "pixy.h"
+#include "Config.h"
 
 
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define SERVO_MIN_US 1000
-#define SERVO_MAX_US 2000
+#define SERVO_MIN_US 1000U
+#define SERVO_MAX_US 2000U
 #define SERVO_LIMITS_US(x)  ((x)<SERVO_MIN_US ? SERVO_MIN_US : ((x)>SERVO_MAX_US ? SERVO_MAX_US : (x)) ) 
+
+#define MAX_VECTORS 10U
+#define MAX_AUTO_DUTYCYCLE 40.0
 
 typedef enum _app_mode {
     kappMode_remotecontrolled,
@@ -46,10 +52,14 @@ app_mode_t appMode = kappMode_remotecontrolled;
 float voltDCB = 12.0;    
 bool_t AppSwitch = false;
 float global_dutycycle;
+float global_servo_angle;
+uint16_t global_servo_period = 1500;
 
 control_panel_t gControlPanelM1;
 control_panel_t gControlPanelM2;
 
+    uint16_t vectors[MAX_VECTORS * 4];
+    size_t   num_vectors;
 /* DMA0 TCD CH0_TRANSFER0 destination address */
 AT_NONCACHEABLE_SECTION_ALIGN_INIT(uint32_t CTIMER0_Timings[4], 16);
 
@@ -62,7 +72,6 @@ int32_t period_channel_b;
 
 void idle_mode(){
     AppSwitch = 0;
-    LED_GREEN_OFF();
     setSpeedDutyCycle(0.0);
 }
 
@@ -185,10 +194,19 @@ void ADC1_IRQHANDLER(void) {
 void CTIMER1_IRQHandler(void){
     
     if(AppSwitch){
-        float channel1_duty = (period_channel_a-1000)/10.0;
-        global_dutycycle = channel1_duty;
+        
+        if (appMode == kappMode_remotecontrolled){
+            float channel1_duty = (period_channel_a-1000)/10.0;
+            global_dutycycle = channel1_duty;
+            global_servo_period = period_channel_b;
+        }
+        if (appMode == kappMode_autonomous){
+            global_dutycycle = MAX_AUTO_DUTYCYCLE;
+            global_servo_period = (global_servo_angle/45)*500+1500;
+        }
+
         setSpeedDutyCycle(global_dutycycle);
-        CTIMER_SetupPwmPeriod(CTIMER2, kCTIMER_Match_0, kCTIMER_Match_1, CTIMER2_PWM_PERIOD, CTIMER2_PWM_PERIOD-period_channel_b, false);
+        CTIMER_SetupPwmPeriod(CTIMER2, kCTIMER_Match_0, kCTIMER_Match_1, CTIMER2_PWM_PERIOD, CTIMER2_PWM_PERIOD - global_servo_period, false);
     }
 
     CTIMER_ClearStatusFlags(CTIMER1, kCTIMER_Match0Flag);
@@ -202,7 +220,7 @@ void CTIMER0_IRQHandler(void){
     period_channel_a = SERVO_LIMITS_US ( diff_us );
 
     diff_us = CTIMER0->CR[3]-CTIMER0->CR[1];
-    diff_us = (diff_us > 2550) ? 0 : diff_us;
+    diff_us = (diff_us > 2550) ? 1500 : diff_us;
     period_channel_b = SERVO_LIMITS_US ( diff_us );
 
     CTIMER_ClearStatusFlags(CTIMER0, kCTIMER_Match0Flag);
@@ -254,6 +272,7 @@ int main(void)
 {
     /* Board pin init */
     BOARD_InitHardware();
+    BOARD_InitDebugConsole();
     EnableIRQ(GPIO00_IRQn);
     EnableIRQ(GPIO01_IRQn);
     EnableIRQ(ADC0_IRQn);
@@ -266,12 +285,43 @@ int main(void)
     LED_RED_INIT(1);
     LED_BLUE_INIT(1);
 
+    pixy_t cam1;
+    pixy_init(&cam1, LPI2C2, 0x54U, &LP_FLEXCOMM2_RX_Handle, &LP_FLEXCOMM2_TX_Handle);
+    //pixy_set_led(&cam1, 255, 0, 0);
+
     while (1)
     {
+        if (pixy_get_vectors(&cam1, vectors, MAX_VECTORS, &num_vectors) == kStatus_Success) {
+            float angle = 0.0;
+            for (size_t i = 0; i < num_vectors; i++) {
+                uint16_t x0 = vectors[4*i + 0];
+                uint16_t y0 = vectors[4*i + 1];
+                uint16_t x1 = vectors[4*i + 2];
+                uint16_t y1 = vectors[4*i + 3];
+                //PRINTF("  [%2u] (%u,%u)->(%u,%u)\r\n", (unsigned)i, x0, y0, x1, y1);
+                float m = ((float)x0-(float)x1) / ((float)y0-(float)y1);
+                angle += m;
+            }
+            angle *= -1;
+            //PRINTF("Angle: %u" , angle);
+            if(angle > 0)
+                angle *= STEERING_P_RIGHT;
+            else{
+                angle *= STEERING_P_LEFT;
+            }
+            if (angle > STEERING_LIMIT_RIGHT){
+                angle = STEERING_LIMIT_RIGHT;
+            }
+            if (angle < STEERING_LIMIT_LEFT){
+                angle = STEERING_LIMIT_LEFT;
+            }
+            if(num_vectors !=0)
+                global_servo_angle = (angle + STEERING_OFFSET);
+        }
         //UTICK0_Callback();
-        //ADC1->SWTRIG = (uint32_t) 0b0010;
-        PRINTF("VDC: %d \n\r", &voltDCB);
-        PRINTF("M1 I: %d \n\r", &gControlPanelM1.currentMeas);
-        PRINTF("M2 I: %d \n\r", &gControlPanelM2.currentMeas);
+        ADC1->SWTRIG = (uint32_t) 0b0010;
+        //PRINTF("VDC: %d \n\r", &voltDCB);
+        //PRINTF("M1 I: %d \n\r", &gControlPanelM1.currentMeas);
+        //PRINTF("M2 I: %d \n\r", &gControlPanelM2.currentMeas);
     }
 }

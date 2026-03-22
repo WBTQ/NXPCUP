@@ -86,11 +86,10 @@ BOARD_InitDEBUG_UARTPins:
 - options: {callFromInitBoot: 'true', coreID: cm33_core0, enableClock: 'true'}
 - pin_list:
   - {pin_num: A1, peripheral: LP_FLEXCOMM4, signal: LPFLEXCOMM_P0, pin_signal: PIO1_8/WUU0_IN10/LPTMR1_ALT3/TRACE_DATA0/FC4_P0/FC5_P4/CT_INP8/SCT0_OUT2/FLEXIO0_D16/SMARTDMA_PIO4/PLU_OUT0/ENET0_TXD2/I3C1_SDA/TSI0_CH17/ADC1_A8,
-    identifier: '', slew_rate: fast, open_drain: disable, drive_strength: low, pull_select: down, pull_enable: disable, passive_filter: disable, pull_value: low,
-    input_buffer: enable, invert_input: normal}
-  - {pin_num: B1, peripheral: LP_FLEXCOMM4, signal: LPFLEXCOMM_P1, pin_signal: PIO1_9/TRACE_DATA1/FC4_P1/FC5_P5/CT_INP9/SCT0_OUT3/FLEXIO0_D17/SMARTDMA_PIO5/PLU_OUT1/ENET0_TXD3/I3C1_SCL/TSI0_CH18/ADC1_A9,
-    identifier: '', slew_rate: fast, open_drain: disable, drive_strength: low, pull_select: down, pull_enable: disable, passive_filter: disable, input_buffer: enable,
+    slew_rate: fast, open_drain: disable, drive_strength: low, pull_select: down, pull_enable: disable, passive_filter: disable, pull_value: low, input_buffer: enable,
     invert_input: normal}
+  - {pin_num: B1, peripheral: LP_FLEXCOMM4, signal: LPFLEXCOMM_P1, pin_signal: PIO1_9/TRACE_DATA1/FC4_P1/FC5_P5/CT_INP9/SCT0_OUT3/FLEXIO0_D17/SMARTDMA_PIO5/PLU_OUT1/ENET0_TXD3/I3C1_SCL/TSI0_CH18/ADC1_A9,
+    slew_rate: fast, open_drain: disable, drive_strength: low, pull_select: down, pull_enable: disable, passive_filter: disable, input_buffer: enable, invert_input: normal}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -106,51 +105,51 @@ void BOARD_InitDEBUG_UARTPins(void)
     /* Enables the clock for PORT1: Enables clock */
     CLOCK_EnableClock(kCLOCK_Port1);
 
-    const port_pin_config_t port1_8_pinA1_config = {/* Internal pull-up/down resistor is disabled */
-                                                    .pullSelect = kPORT_PullDisable,
-                                                    /* Low internal pull resistor value is selected. */
-                                                    .pullValueSelect = kPORT_LowPullResistor,
-                                                    /* Fast slew rate is configured */
-                                                    .slewRate = kPORT_FastSlewRate,
-                                                    /* Passive input filter is disabled */
-                                                    .passiveFilterEnable = kPORT_PassiveFilterDisable,
-                                                    /* Open drain output is disabled */
-                                                    .openDrainEnable = kPORT_OpenDrainDisable,
-                                                    /* Low drive strength is configured */
-                                                    .driveStrength = kPORT_LowDriveStrength,
-                                                    /* Pin is configured as FC4_P0 */
-                                                    .mux = kPORT_MuxAlt2,
-                                                    /* Digital input enabled */
-                                                    .inputBuffer = kPORT_InputBufferEnable,
-                                                    /* Digital input is not inverted */
-                                                    .invertInput = kPORT_InputNormal,
-                                                    /* Pin Control Register fields [15:0] are not locked */
-                                                    .lockRegister = kPORT_UnlockRegister};
+    const port_pin_config_t DEBUG_UART_RX = {/* Internal pull-up/down resistor is disabled */
+                                             .pullSelect = kPORT_PullDisable,
+                                             /* Low internal pull resistor value is selected. */
+                                             .pullValueSelect = kPORT_LowPullResistor,
+                                             /* Fast slew rate is configured */
+                                             .slewRate = kPORT_FastSlewRate,
+                                             /* Passive input filter is disabled */
+                                             .passiveFilterEnable = kPORT_PassiveFilterDisable,
+                                             /* Open drain output is disabled */
+                                             .openDrainEnable = kPORT_OpenDrainDisable,
+                                             /* Low drive strength is configured */
+                                             .driveStrength = kPORT_LowDriveStrength,
+                                             /* Pin is configured as FC4_P0 */
+                                             .mux = kPORT_MuxAlt2,
+                                             /* Digital input enabled */
+                                             .inputBuffer = kPORT_InputBufferEnable,
+                                             /* Digital input is not inverted */
+                                             .invertInput = kPORT_InputNormal,
+                                             /* Pin Control Register fields [15:0] are not locked */
+                                             .lockRegister = kPORT_UnlockRegister};
     /* PORT1_8 (pin A1) is configured as FC4_P0 */
-    PORT_SetPinConfig(PORT1, 8U, &port1_8_pinA1_config);
+    PORT_SetPinConfig(BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_PORT, BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_PIN, &DEBUG_UART_RX);
 
-    const port_pin_config_t port1_9_pinB1_config = {/* Internal pull-up/down resistor is disabled */
-                                                    .pullSelect = kPORT_PullDisable,
-                                                    /* Low internal pull resistor value is selected. */
-                                                    .pullValueSelect = kPORT_LowPullResistor,
-                                                    /* Fast slew rate is configured */
-                                                    .slewRate = kPORT_FastSlewRate,
-                                                    /* Passive input filter is disabled */
-                                                    .passiveFilterEnable = kPORT_PassiveFilterDisable,
-                                                    /* Open drain output is disabled */
-                                                    .openDrainEnable = kPORT_OpenDrainDisable,
-                                                    /* Low drive strength is configured */
-                                                    .driveStrength = kPORT_LowDriveStrength,
-                                                    /* Pin is configured as FC4_P1 */
-                                                    .mux = kPORT_MuxAlt2,
-                                                    /* Digital input enabled */
-                                                    .inputBuffer = kPORT_InputBufferEnable,
-                                                    /* Digital input is not inverted */
-                                                    .invertInput = kPORT_InputNormal,
-                                                    /* Pin Control Register fields [15:0] are not locked */
-                                                    .lockRegister = kPORT_UnlockRegister};
+    const port_pin_config_t DEBUG_UART_TX = {/* Internal pull-up/down resistor is disabled */
+                                             .pullSelect = kPORT_PullDisable,
+                                             /* Low internal pull resistor value is selected. */
+                                             .pullValueSelect = kPORT_LowPullResistor,
+                                             /* Fast slew rate is configured */
+                                             .slewRate = kPORT_FastSlewRate,
+                                             /* Passive input filter is disabled */
+                                             .passiveFilterEnable = kPORT_PassiveFilterDisable,
+                                             /* Open drain output is disabled */
+                                             .openDrainEnable = kPORT_OpenDrainDisable,
+                                             /* Low drive strength is configured */
+                                             .driveStrength = kPORT_LowDriveStrength,
+                                             /* Pin is configured as FC4_P1 */
+                                             .mux = kPORT_MuxAlt2,
+                                             /* Digital input enabled */
+                                             .inputBuffer = kPORT_InputBufferEnable,
+                                             /* Digital input is not inverted */
+                                             .invertInput = kPORT_InputNormal,
+                                             /* Pin Control Register fields [15:0] are not locked */
+                                             .lockRegister = kPORT_UnlockRegister};
     /* PORT1_9 (pin B1) is configured as FC4_P1 */
-    PORT_SetPinConfig(PORT1, 9U, &port1_9_pinB1_config);
+    PORT_SetPinConfig(BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PORT, BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PIN, &DEBUG_UART_TX);
 }
 
 /* clang-format off */

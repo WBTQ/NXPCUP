@@ -34,7 +34,6 @@
 #include "fsl_lpuart.h"
 #include "freemaster.h"
 #include "freemaster_serial_lpuart.h"
-#include "fsl_debug_console.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -90,8 +89,6 @@ extern "C" {
 #define PWM1_SM1_B kPWM_PwmB
 /* Definition of submodule 1 channel X ID */
 #define PWM1_SM1_X kPWM_PwmX
-/* Definition of submodule 1 number of cycles delayed from submodule 0 */
-#define PWM1_SM1_DELAY_CYCLES 0U
 /* Definition of fault Fault0 ID */
 #define PWM1_F0_FAULT0 kPWM_Fault_0
 /* Definition of fault Fault1 ID */
@@ -100,8 +97,6 @@ extern "C" {
 #define PWM1_F0_FAULT2 kPWM_Fault_2
 /* Definition of fault Fault3 ID */
 #define PWM1_F0_FAULT3 kPWM_Fault_3
-/* Definition of unused parameter channel for the PWM_SetPhaseDelay() */
-#define PWM1_UNUSED_CHANNEL_PARAM kPWM_PwmX
 /* Alias for ADC0 peripheral */
 #define ADC0_PERIPHERAL ADC0
 /* ADC0 interrupt vector ID (number). */
@@ -225,16 +220,6 @@ extern "C" {
 #define FREEMASTER_SERIAL_PERIPHERAL_CLK_FREQ 12000000UL
 /* Definition of the Baud rate */
 #define FREEMASTER_SERIAL_PERIPHERAL_BAUDRATE 115200UL
-/* Debug console is initialized in the peripheral tool */
-#define BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL 
-/* Definition of serial peripheral instance */
-#define DEBUGCONSOLE_INSTANCE 4U
-/* Definition of serial peripheral type */
-#define DEBUGCONSOLE_TYPE kSerialPort_Uart
-/* Definition of the Baud rate */
-#define DEBUGCONSOLE_BAUDRATE 115200UL
-/* Definition of the clock source frequency */
-#define DEBUGCONSOLE_CLK_FREQ 12000000UL
 
 /***********************************************************************************************************************
  * Global variables

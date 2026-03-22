@@ -95,7 +95,6 @@
                <pins>
                   <pin peripheral="LP_FLEXCOMM4" signal="LPFLEXCOMM_P0" pin_num="A1" pin_signal="PIO1_8/WUU0_IN10/LPTMR1_ALT3/TRACE_DATA0/FC4_P0/FC5_P4/CT_INP8/SCT0_OUT2/FLEXIO0_D16/SMARTDMA_PIO4/PLU_OUT0/ENET0_TXD2/I3C1_SDA/TSI0_CH17/ADC1_A8">
                      <pin_features>
-                        <pin_feature name="identifier" value=""/>
                         <pin_feature name="slew_rate" value="fast"/>
                         <pin_feature name="open_drain" value="disable"/>
                         <pin_feature name="drive_strength" value="low"/>
@@ -109,7 +108,6 @@
                   </pin>
                   <pin peripheral="LP_FLEXCOMM4" signal="LPFLEXCOMM_P1" pin_num="B1" pin_signal="PIO1_9/TRACE_DATA1/FC4_P1/FC5_P5/CT_INP9/SCT0_OUT3/FLEXIO0_D17/SMARTDMA_PIO5/PLU_OUT1/ENET0_TXD3/I3C1_SCL/TSI0_CH18/ADC1_A9">
                      <pin_features>
-                        <pin_feature name="identifier" value=""/>
                         <pin_feature name="slew_rate" value="fast"/>
                         <pin_feature name="open_drain" value="disable"/>
                         <pin_feature name="drive_strength" value="low"/>
@@ -930,16 +928,6 @@
                   <data type="Version">2.2.0</data>
                </feature>
             </dependency>
-            <dependency resourceType="SWComponent" resourceId="utility.debug_console" description="Utility debug_console is not found in the toolchain/IDE project. The project will not compile!" problem_level="2" source="Peripherals">
-               <feature name="enabled" evaluation="equal">
-                  <data type="Boolean">true</data>
-               </feature>
-            </dependency>
-            <dependency resourceType="SWComponent" resourceId="utility.debug_console" description="An unsupported version of the Utility debug_console in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. The project might not compile correctly." problem_level="1" source="Peripherals">
-               <feature name="version" evaluation="equivalent">
-                  <data type="Version">1.0.0</data>
-               </feature>
-            </dependency>
             <dependency resourceType="Tool" resourceId="Pins" description="The Pins tool is required by the Peripherals tool, but it is disabled." problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data>true</data>
@@ -955,7 +943,6 @@
             <file path="board/peripherals.c" update_enabled="true"/>
             <file path="board/peripherals.h" update_enabled="true"/>
             <file path="source/freemaster_cfg.h" update_enabled="true"/>
-            <file path="utilities/fsl_debug_console_conf.h" update_enabled="true"/>
          </generated_project_files>
          <peripherals_profile>
             <processor_version>25.12.10</processor_version>
@@ -1146,31 +1133,6 @@
                      </feature>
                   </dependency>
                   <dependency resourceType="ClockOutput" resourceId="CLK16K1_toVSYS_clock" description="CLK16K_1 is inactive." problem_level="2" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="frequency" evaluation="greaterThan">
-                        <data type="Frequency" unit="Hz">0</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="SWComponent" resourceId="component.serial_manager_uart" description="The serial_port_uart driver is missing in the project (required for the Debug console initialization)." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="enabled" evaluation="equal">
-                        <data type="Boolean">true</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="SWComponent" resourceId="component.lpuart_adapter" description="The lpuart_adapter driver is missing in the project (required for the serial port initialization)." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="enabled" evaluation="equal">
-                        <data type="Boolean">true</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="LP_FLEXCOMM4.uart_rx" description="Signal RX is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="routed" evaluation="equal">
-                        <data type="Boolean">true</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="LP_FLEXCOMM4.uart_tx" description="Signal TX is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="routed" evaluation="equal">
-                        <data type="Boolean">true</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="ClockOutput" resourceId="FLEXCOMM4_clock" description="FLEXCOMM4CLK is inactive." problem_level="2" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="frequency" evaluation="greaterThan">
                         <data type="Frequency" unit="Hz">0</data>
                      </feature>
@@ -1972,7 +1934,7 @@
                               <setting name="subaddress" value="0"/>
                               <setting name="subaddressSize" value="1"/>
                               <setting name="data" value="default"/>
-                              <setting name="data_size_i" value="10"/>
+                              <setting name="data_size_i" value="69"/>
                            </struct>
                         </struct>
                         <setting name="channel_rx_init" value="true"/>
@@ -2161,7 +2123,7 @@
                         </struct>
                      </config_set>
                   </instance>
-                  <instance name="DebugConsole" uuid="a48d7564-67da-4539-b7d2-e0aefd3425c3" type="debug_console" type_id="debug_console_1.0.0" mode="general" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
+                  <instance name="DebugConsole" uuid="a48d7564-67da-4539-b7d2-e0aefd3425c3" type="debug_console" type_id="debug_console_1.0.0" mode="general" enabled="false" comment="" custom_name_enabled="false" editing_lock="false">
                      <config_set name="fsl_debug_console">
                         <struct name="config">
                            <setting name="SDK_DEBUGCONSOLE" value="DEBUGCONSOLE_REDIRECT_TO_SDK"/>
@@ -2186,7 +2148,6 @@
                               <setting name="peripheralUART" value="LP_FLEXCOMM4"/>
                               <setting name="clockSource" value="genericUartClockSource"/>
                               <setting name="clockSourceFreq" value="ClocksTool_DefaultInit"/>
-                              <setting name="baudRate_Bps" value="115200"/>
                            </struct>
                         </struct>
                         <struct name="debug_console_codegenerator"/>
