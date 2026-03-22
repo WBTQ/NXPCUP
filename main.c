@@ -198,11 +198,11 @@ void CTIMER0_IRQHandler(void){
     uint32_t diff_us; 
 
     diff_us = CTIMER0->CR[2]-CTIMER0->CR[0];
-    diff_us = (diff_us > 2050) ? 0 : diff_us;
+    diff_us = (diff_us > 2550) ? 0 : diff_us;
     period_channel_a = SERVO_LIMITS_US ( diff_us );
 
     diff_us = CTIMER0->CR[3]-CTIMER0->CR[1];
-    diff_us = (diff_us > 2050) ? 0 : diff_us;
+    diff_us = (diff_us > 2550) ? 0 : diff_us;
     period_channel_b = SERVO_LIMITS_US ( diff_us );
 
     CTIMER_ClearStatusFlags(CTIMER0, kCTIMER_Match0Flag);
